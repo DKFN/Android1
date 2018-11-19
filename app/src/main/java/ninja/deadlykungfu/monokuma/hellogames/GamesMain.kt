@@ -1,5 +1,6 @@
 package ninja.deadlykungfu.monokuma.hellogames
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,15 +12,31 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 data class Game(val id: Int, val name: String)
+data class ExtendedGame(
+    val id: Int,
+    val name: String,
+    val type: String,
+    val players: Int,
+    val year: Int,
+    val url: String,
+    val description_fr: String,
+    val description_en: String
+)
 
 interface WSInterface {
     @GET("game/list")
     fun getGames(): Call<List<Game>>
+
+    @GET("/game/details")
+    fun getGame(@Query("game_id") gameId: Int): Call<ExtendedGame>
 }
 
 class GamesMain : AppCompatActivity() {
+    val intt: Intent by lazy { Intent(this, DetailView::class.java) }
+
     val appData = arrayListOf<Game>()
     val apiBaseURL = "https://androidlessonsapi.herokuapp.com/api/"
 
@@ -59,6 +76,22 @@ class GamesMain : AppCompatActivity() {
         sv.getGames().enqueue(fetcherCallback)
         // sv.getGames().execute()
         setContentView(R.layout.activity_games_main)
+
+        button1.setOnClickListener {
+            startActivity(intt)
+        }
+
+        button2.setOnClickListener {
+            startActivity(intt)
+        }
+
+        button3.setOnClickListener {
+            startActivity(intt)
+        }
+
+        button4.setOnClickListener {
+            startActivity(intt)
+        }
     }
 
 
